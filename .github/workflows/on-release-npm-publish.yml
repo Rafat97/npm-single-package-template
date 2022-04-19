@@ -39,19 +39,18 @@ jobs:
 #           echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       
       - name: version change
-        run: npm version  ${{ env.RELEASE_VERSION }} --allow-same-version
+        run: |
+          git config --local user.email "rafathaque1997@gmail.com"
+          git config --local user.name "rafat97"
+          npm version  ${{ env.RELEASE_VERSION }} --allow-same-version
+          echo "${{ env.RELEASE_VERSION }}" > VERSION
+          git add . 
+          git status
+          git commit  -m "ok" 
+          git push origin master
         
         
       - run: npm publish 
         env:
          NODE_AUTH_TOKEN: "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"
  
-      - name: git commit 
-        run: |
-          git config --local user.email "rafathaque1997@gmail.com"
-          git config --local user.name "rafat97"
-          echo "${{ env.RELEASE_VERSION }}" > VERSION
-          git add . 
-          git status
-          git commit  -m "ok" 
-          git push origin master
