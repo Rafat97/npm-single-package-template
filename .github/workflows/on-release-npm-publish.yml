@@ -4,18 +4,20 @@ name: Node.js Package Publish CI
 # deleted 
 on:
   release:
-    types: ["published"]
+    types: ["released"]
     
 
 jobs:
      
-  build:
+  build-and-publish:
+#     if: github.action.prerelease === false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+          registry-url: https://registry.npmjs.org/
       - run: npm install
       - run: npm test
       - run: npm run build
@@ -42,9 +44,10 @@ jobs:
       - name: version change
         run: npm version  ${{ github.event.tag_name }}  --allow-same-version
         
+        
       - run: npm publish
         env:
-         NODE_AUTH_TOKEN: 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
+         NODE_AUTH_TOKEN: "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"
  
       - name: git commit 
         run: |
