@@ -54,7 +54,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: "patch"
-          
+          custom_tag: ${{ steps.pk_version.outputs.current-version  }}
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
