@@ -1,10 +1,14 @@
 name: Node.js Package Publish CI
 
+# published, created, released
+# deleted 
 on:
   release:
+    types: ["published"]
     
 
 jobs:
+     
   build:
     runs-on: ubuntu-latest
     steps:
@@ -15,12 +19,17 @@ jobs:
       - run: npm install
       - run: npm test
       - run: npm run build
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: List files in the repository
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
           GITHUB_EVENT: ${{ toJson(github.event) }}
+          EVENT_TAG_NAME: ${{ github.event.tag_name }}
         run: |
-          echo "🎉 The job was automatically triggered by a ${{ github.event.action }} event."
+          echo "🎉 The action ${{ github.event.action }} event."
+          echo "🎉 tag name ${{ github.event.tag_name }} event."
           echo "$GITHUB_CONTEXT"
           echo "$GITHUB_EVENT"
           echo "🎉 The job was automatically triggered by a ${{ github }} event."
@@ -29,17 +38,20 @@ jobs:
           echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
           echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
           echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-
-  # publish-npm:
-  #  needs: build
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - uses: actions/checkout@v3
-  #    - uses: actions/setup-node@v3
-  #      with:
-  #        node-version: 16
-  #        registry-url: https://registry.npmjs.org/
-  #    - run: npm ci
-  #    - run: npm publish
-  #      env:
-  #        NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      
+      - name: version change
+        run: npm version  ${{ github.event.tag_name }}  --allow-same-version
+        
+      - run: npm publish
+        env:
+         NODE_AUTH_TOKEN: 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
+ 
+      - name: git commit 
+        run: |
+          git config --local user.email "rafathaque1997@gmail.com"
+          git config --local user.name "rafat97"
+          echo "${{ github.event.tag_name }}" > VERSION
+          git add . 
+          git status
+          git commit  -m "ok" 
+          git push origin master
