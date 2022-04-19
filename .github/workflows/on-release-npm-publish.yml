@@ -45,9 +45,9 @@ jobs:
         run: npm version  ${{ github.event.tag_name }}  --allow-same-version
         
         
-      - run: npm publish --access=public
+      - run: npm publish 
         env:
-         NODE_AUTH_TOKEN: "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"
+         NODE_AUTH_TOKEN: "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"
  
       - name: git commit 
         run: |
