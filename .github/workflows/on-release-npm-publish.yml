@@ -45,7 +45,7 @@ jobs:
         run: npm version  ${{ github.event.tag_name }}  --allow-same-version
         
         
-      - run: npm publish
+      - run: npm publish --access=public
         env:
          NODE_AUTH_TOKEN: "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"
  
