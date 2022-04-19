@@ -22,17 +22,17 @@ jobs:
       - run: npm test
       - run: npm run build
       - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        id: get_tag
+#         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - name: List files in the repository
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-          GITHUB_EVENT: ${{ toJson(github.event) }}
-          EVENT_TAG_NAME: ${{ github.event.tag_name }}
-          
+          GITHUB_EVENT: ${{ toJson(github.event) 
+          RELEASE_VERSION: ${{ steps.get_tag.outputs.tag }}
         run: |
           echo "🎉 The action ${{ github.event.action }} event."
-          echo "🎉 tag name ${{ github.event.tag_name }} event."
+          echo "🎉 tag name ${{ RELEASE_VERSION }} event."
           echo "$GITHUB_CONTEXT"
           echo "$GITHUB_EVENT"
           echo "🎉 The job was automatically triggered by a ${{ github }} event."
@@ -43,7 +43,7 @@ jobs:
           echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       
       - name: version change
-        run: npm version  ${{ github.event.tag_name }}  --allow-same-version
+        run: npm version  ${{ steps.get_tag.outputs.tag }} --allow-same-version
         
         
       - run: npm publish 
@@ -54,7 +54,7 @@ jobs:
         run: |
           git config --local user.email "rafathaque1997@gmail.com"
           git config --local user.name "rafat97"
-          echo "${{ github.event.tag_name }}" > VERSION
+          echo "${{ steps.get_tag.outputs.tag }}" > VERSION
           git add . 
           git status
           git commit  -m "ok" 
