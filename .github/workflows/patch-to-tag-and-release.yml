@@ -1,0 +1,25 @@
+name: Node.js Package Create Tag and Release
+
+on: workflow_dispatch
+
+jobs:
+  build-version-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+          
+      - run: npm install
+      - run: npm test
+      - run: npm run build
+      - name: version change
+        run: |
+          git config --local user.email "rafathaque1997@gmail.com"
+          git config --local user.name "rafat97"
+          npm version patch --allow-same-version
+          
+          
+    
