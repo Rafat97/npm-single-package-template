@@ -47,7 +47,7 @@ jobs:
           git add . 
           git status
           git commit  -m "ok" 
-          git push origin master
+          git push 
         
         
       - run: npm publish 
