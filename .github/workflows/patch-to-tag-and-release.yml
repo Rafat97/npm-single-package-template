@@ -2,6 +2,7 @@ name: Node.js Package Create Tag and Release patch
 
 on: workflow_dispatch
 
+
 jobs:
   build-version-patch:
     runs-on: ubuntu-latest
@@ -21,9 +22,7 @@ jobs:
           git config --local user.name "rafat97"
           npm version patch --allow-same-version 
           git status 
-          git add .
-          git commit -m "Push version ${{ steps.tag_version.outputs.new_tag }}"
-          git push --force
+          
           
       - run: npm publish 
         env:
