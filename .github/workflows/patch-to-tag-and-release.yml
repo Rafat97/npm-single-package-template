@@ -19,10 +19,11 @@ jobs:
         run: |
           git config --local user.email "rafathaque1997@gmail.com"
           git config --local user.name "rafat97"
-          npm version patch --allow-same-version
+          npm version patch --allow-same-version 
+          git status 
           git add .
           git commit -m "Push version ${{ steps.tag_version.outputs.new_tag }}"
-          git push 
+          git push -force
           
       - run: npm publish 
         env:
