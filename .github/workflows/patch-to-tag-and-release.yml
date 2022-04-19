@@ -21,7 +21,7 @@ jobs:
         run: |
           git config --local user.email "rafathaque.bot@gmail.com"
           git config --local user.name "rafat97bot"
-          npm --no-git-tag-version version minor 
+          npm --no-git-tag-version version patch 
           git status
     
       - name: GIT Push
