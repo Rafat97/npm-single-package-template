@@ -35,9 +35,9 @@ jobs:
       - run: npm test
       - run: npm run build
 
-      #- run: npm publish 
-       # env:
-         # NODE_AUTH_TOKEN: "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"
+      - run: npm publish 
+        env:
+          NODE_AUTH_TOKEN: "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"
          
       - name: Update version in package.json
         run: |
