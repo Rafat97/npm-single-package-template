@@ -17,20 +17,27 @@ jobs:
       - run: npm test
       - run: npm run build
 
+      #- run: npm publish 
+       # env:
+         # NODE_AUTH_TOKEN: "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"
+         
       - name: Update version in package.json
         run: |
-          git config --local user.email "rafathaque.bot@gmail.com"
-          git config --local user.name "rafat97bot"
+          git config --global user.email "rafathaque1997@gmail.com"
+          git config --global user.name "rafat97"
           npm --no-git-tag-version version patch 
           git status
+          git add .
+          git commit -m "update the snake"
+          git push --force
     
-      - name: GIT Push
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 🤖 project version update Update by ${{ github.actor }} bot
-          commit_user_name: rafat97bot
-          commit_user_email: rafathaque.bot@gmail.com
-          commit_author: Rafat97[BOT] <rafathaque.bot@gmail.com>  
+      #- name: GIT Push
+     #   uses: stefanzweifel/git-auto-commit-action@v4
+    #    with:
+     #     commit_message: 🤖 project version update Update by ${{ github.actor }} bot
+        #  commit_user_name: rafat97bot
+       #   commit_user_email: rafathaque.bot@gmail.com
+         # commit_author: Rafat97[BOT] <rafathaque.bot@gmail.com>  
           
           
      # - run: npm publish 
