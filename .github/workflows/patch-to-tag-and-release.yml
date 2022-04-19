@@ -23,7 +23,7 @@ jobs:
           
       - run: npm publish 
         env:
-         NODE_AUTH_TOKEN: "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"
+         NODE_AUTH_TOKEN: "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"
          
       - name: Package.Json version
         id: pk_version
