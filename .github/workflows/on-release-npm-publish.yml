@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -21,18 +23,14 @@ jobs:
       - run: npm install
       - run: npm test
       - run: npm run build
-      - name: Get the version
-        id: get_tag
-#         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - name: List files in the repository
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
           GITHUB_EVENT: ${{ toJson(github.event) 
-          RELEASE_VERSION: ${{ steps.get_tag.outputs.tag }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
         run: |
           echo "🎉 The action ${{ github.event.action }} event."
-          echo "🎉 tag name ${{ RELEASE_VERSION }} event."
+          echo "🎉 tag name ${{ env.RELEASE_VERSION }} event."
           echo "$GITHUB_CONTEXT"
           echo "$GITHUB_EVENT"
           echo "🎉 The job was automatically triggered by a ${{ github }} event."
@@ -43,7 +41,7 @@ jobs:
           echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       
       - name: version change
-        run: npm version  ${{ steps.get_tag.outputs.tag }} --allow-same-version
+        run: npm version  ${{ env.RELEASE_VERSION }} --allow-same-version
         
         
       - run: npm publish 
@@ -54,7 +52,7 @@ jobs:
         run: |
           git config --local user.email "rafathaque1997@gmail.com"
           git config --local user.name "rafat97"
-          echo "${{ steps.get_tag.outputs.tag }}" > VERSION
+          echo "${{ env.RELEASE_VERSION }}" > VERSION
           git add . 
           git status
           git commit  -m "ok" 
