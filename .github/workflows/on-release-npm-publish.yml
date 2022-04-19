@@ -46,5 +46,5 @@ jobs:
         
       - run: npm publish 
         env:
-         NODE_AUTH_TOKEN: "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"
+         NODE_AUTH_TOKEN: "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"
  
