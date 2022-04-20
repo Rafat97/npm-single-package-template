@@ -19,4 +19,6 @@ packages/**/cypress/videos/
 yarn.lock
 package-lock.json
 packages/*/.watchmanconfig
-lib/
+.gitignore
+src/
+__tests__/

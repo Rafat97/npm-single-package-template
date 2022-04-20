@@ -35,7 +35,11 @@ jobs:
 
       - run: npm install
       - run: npm test
-      - run: npm run build
+      - name: TypeScript Build
+        run: |
+          echo "Compiling TypeScript"
+          npm run build
+
 
       - if: ${{ github.event.inputs.version_type == 'patch-prerelease-beta' }}
         name: Version Change to Prerelease
@@ -68,6 +72,7 @@ jobs:
         name: Npm publish prerelease
         run: |
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
+          ls -la
           npm publish --tag beta
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} beta
         env:
@@ -77,6 +82,7 @@ jobs:
         name: Npm publish patch, major, minor
         run: |
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
+          ls -la
           npm publish --tag latest
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} latest
         env:
