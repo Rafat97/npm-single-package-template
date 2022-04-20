@@ -13,11 +13,11 @@ on:
         - patch
       npm_registry_api_key:
         required: true
-      use-emoji:
-        type: boolean
-        description: Include  emojis
-      environment:
-        type: environment
+#       use-emoji:
+#         type: boolean
+#         description: Include  emojis
+#       environment:
+#         type: environment
 
 
 jobs:
