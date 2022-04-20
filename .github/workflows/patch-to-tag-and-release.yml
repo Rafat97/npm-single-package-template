@@ -16,11 +16,6 @@ on:
       npm_registry_api_key:
         required: true
         description: Give Npm Package Registry Access Token
-#       use-emoji:
-#         type: boolean
-#         description: Include  emojis
-#       environment:
-#         type: environment
 
 jobs:
   build-version-patch:
@@ -42,13 +37,13 @@ jobs:
       - run: npm test
       - run: npm run build
 
-      - if: ${{ github.event.inputs.version_type }} == 'patch-prerelease-beta'
+      - if: ${{ github.event.inputs.version_type == 'patch-prerelease-beta' }}
         name: Version Change to Prerelease
         run: |
           echo "Version type ${{ github.event.inputs.version_type }}"
           npm version prerelease --preid beta -m "Upgrade to %s " --no-git-tag-version
 
-      - if: ${{ github.event.inputs.version_type }} != 'patch-prerelease-beta'
+      - if: ${{ github.event.inputs.version_type != 'patch-prerelease-beta' }}
         name: Version Change to `${{ github.event.inputs.version_type }}`
         run: |
           echo "Version type ${{ github.event.inputs.version_type }}"
@@ -69,7 +64,14 @@ jobs:
           echo "${{ steps.pk_version.outputs.current-version  }}"
           echo "${{ steps.pk_version.outputs.current-package-name  }}"
 
-      - if: ${{ github.event.inputs.version_type }} != 'patch-prerelease-beta'
+      - if: ${{ github.event.inputs.version_type == 'patch-prerelease-beta' }}
+        name: Npm publish prerelease
+        run: |
+          echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
+          npm publish --tag beta
+          npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} beta
+
+      - if: ${{ github.event.inputs.version_type != 'patch-prerelease-beta' }}
         name: Npm publish ${{steps.pk_version.outputs.current-version}}
         run: |
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
@@ -77,13 +79,6 @@ jobs:
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} latest
         env:
           NODE_AUTH_TOKEN: ${{ github.event.inputs.npm_registry_api_key }}
-
-      - if: ${{ github.event.inputs.version_type }} == 'patch-prerelease-beta'
-        name: Npm publish prerelease
-        run: |
-          echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
-          npm publish --tag beta
-          npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} beta
 
       - name: Update version in package.json
         run: |
