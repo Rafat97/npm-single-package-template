@@ -3,7 +3,7 @@ name: Node.js Package Create Tag and Release patch
 on:
  workflow_dispatch:
     inputs:
-      version:
+      version_type:
         required: true
         type: Version Type
         description: How to increament the version?
@@ -24,8 +24,8 @@ jobs:
   build-version-patch:
     runs-on: ubuntu-latest
     steps:
-      - name: Send greeting
-        run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", ""]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+#       - name: Send greeting
+#         run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", ""]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
 
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -36,7 +36,7 @@ jobs:
       - run: npm install
       - run: npm test
       - run: npm run build
-      - run: npm --no-git-tag-version version ${{ github.event.inputs.version }}
+      - run: npm --no-git-tag-version version ${{ github.event.inputs.version_type }}
       
       - name: Package.Json version
         id: pk_version
