@@ -5,7 +5,7 @@ on:
     inputs:
       version_type:
         required: true
-        type: Version Type
+        type: choice
         description: How to increament the version?
         options: 
         - major
