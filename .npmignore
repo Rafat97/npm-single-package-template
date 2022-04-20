@@ -20,5 +20,7 @@ yarn.lock
 package-lock.json
 packages/*/.watchmanconfig
 .gitignore
-src/
+.editorconfig
 __tests__/
+src/
+.github/
