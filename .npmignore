@@ -24,3 +24,5 @@ packages/*/.watchmanconfig
 __tests__/
 src/
 .github/
+jest.config.ts
+example/
