@@ -1,6 +1,6 @@
 {
   "name": "@rafat97/hello-world",
-  "version": "0.0.10-beta.3",
+  "version": "0.0.10",
   "description": "Hello world package",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
