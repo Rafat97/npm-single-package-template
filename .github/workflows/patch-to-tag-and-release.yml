@@ -24,7 +24,7 @@ jobs:
       VERSION_TYPE: ${{github.event.inputs.version_type}}
       NPM_REG_ACC_TOK: ${{github.event.inputs.npm_registry_api_key}}
     steps:
-       - name: Send greeting
+      - name: Send greeting
         run: |
           echo "Version type ${{ env.VERSION_TYPE }}"
 
