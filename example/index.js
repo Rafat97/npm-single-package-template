@@ -1,2 +1,2 @@
-const hell = require("@rafat97/hello-world")
-hell.helloWorld()
+const hello = require("@rafat97/hello-world")
+hello.helloWorld()
