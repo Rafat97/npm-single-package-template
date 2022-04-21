@@ -20,12 +20,13 @@ on:
 jobs:
   build-version-patch:
     runs-on: ubuntu-latest
+    env:
+      VERSION_TYPE: ${{github.event.inputs.version_type}}
+      NPM_REG_ACC_TOK: ${{github.event.inputs.npm_registry_api_key}}
     steps:
-      #       - name: Send greeting
-      #         run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", ""]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
-      - name: Send greeting
+       - name: Send greeting
         run: |
-          echo "Version type ${{ github.event.inputs.version_type }}"
+          echo "Version type ${{ env.VERSION_TYPE }}"
 
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -41,17 +42,17 @@ jobs:
           npm run build
 
 
-      - if: ${{ github.event.inputs.version_type == 'patch-prerelease-beta' }}
+      - if: ${{ env.VERSION_TYPE == 'patch-prerelease-beta' }}
         name: Version Change to Prerelease
         run: |
-          echo "Version type ${{ github.event.inputs.version_type }}"
+          echo "Version type  ${{ env.VERSION_TYPE }}"
           npm version prerelease --preid beta -m "Upgrade to %s " --no-git-tag-version
 
-      - if: ${{ github.event.inputs.version_type != 'patch-prerelease-beta' }}
+      - if: ${{ env.VERSION_TYPE != 'patch-prerelease-beta' }}
         name: Version Change to patch, major, minor
         run: |
-          echo "Version type ${{ github.event.inputs.version_type }}"
-          npm version ${{ github.event.inputs.version_type }} -m "Upgrade to %s " --no-git-tag-version
+          echo "Version type ${{ env.VERSION_TYPE }}"
+          npm version ${{ env.VERSION_TYPE }} -m "Upgrade to %s " --no-git-tag-version
 
       - name: package.json Information
         id: pk_version
@@ -68,7 +69,7 @@ jobs:
           echo "${{ steps.pk_version.outputs.current-version  }}"
           echo "${{ steps.pk_version.outputs.current-package-name  }}"
 
-      - if: ${{ github.event.inputs.version_type == 'patch-prerelease-beta' }}
+      - if: ${{ env.VERSION_TYPE == 'patch-prerelease-beta' }}
         name: Npm publish prerelease
         run: |
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
@@ -76,7 +77,7 @@ jobs:
           npm publish --tag beta
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} beta
         env:
-          NODE_AUTH_TOKEN: ${{ github.event.inputs.npm_registry_api_key }}
+          NODE_AUTH_TOKEN: ${{ env.NPM_REG_ACC_TOK }}
 
       - if: ${{ github.event.inputs.version_type != 'patch-prerelease-beta' }}
         name: Npm publish patch, major, minor
@@ -86,7 +87,7 @@ jobs:
           npm publish --tag latest
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} latest
         env:
-          NODE_AUTH_TOKEN: ${{ github.event.inputs.npm_registry_api_key }}
+          NODE_AUTH_TOKEN: ${{ env.NPM_REG_ACC_TOK }}
 
       - name: Update version in package.json
         run: |
