@@ -69,7 +69,7 @@ jobs:
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
           ls -la
           echo "Start Publishing"
-          npm publish
+          npm publish --tag ${{ env.PACKAGE_PRE_ID }}
           echo "Start taging"
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} ${{ env.PACKAGE_PRE_ID }}
         env:
@@ -77,19 +77,26 @@ jobs:
 
       - name: Comment
         uses: actions/github-script@v6
+        env:
+          DEPLOYED_PACKAGE_NAME: ${{ steps.pk_version.outputs.current-package-name  }}
+          DEPLOYED_PACKAGE_VERSION: ${{ steps.pk_version.outputs.current-version  }}
         with:
           script: |
+            const prid = context.issue.number;
+            const pac_name = process.env.DEPLOYED_PACKAGE_NAME;
+            const pac_version = process.env.DEPLOYED_PACKAGE_VERSION;
+            
             github.rest.issues.createComment({
-            issue_number: context.issue.number,
+            issue_number: prid,
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: `
-            PR: context.issue.number
+            PR: ${prid}
 
             Package - 
-            npm install ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}
+            npm install ${pac_name}@${pac_version}
             or
-            yarn add ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}
+            yarn add ${pac_name}@${pac_version}
             `
             })
 
