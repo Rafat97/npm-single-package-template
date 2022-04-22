@@ -91,23 +91,40 @@ jobs:
         env:
           DEPLOYED_PACKAGE_NAME: ${{ steps.pk_version.outputs.current-package-name  }}
           DEPLOYED_PACKAGE_VERSION: ${{ steps.pk_version.outputs.current-version  }}
+          CODE_LATEST_COMMIT: ${{steps.brnh_s_sha.outputs.sha_short }}
         with:
           script: |
             const prid = context.issue.number;
             const pac_name = process.env.DEPLOYED_PACKAGE_NAME;
             const pac_version = process.env.DEPLOYED_PACKAGE_VERSION;
+            const latest_commit = process.env.CODE_LATEST_COMMIT;
             
             github.rest.issues.createComment({
             issue_number: prid,
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: `
-            PR: ${prid}
+            ## Deploying with Automation Action
+            
+            
+            <table>
+            <tr>
+            <td><strong>Latest Commit</strong> </td>
+            <td><code> ${latest_commit} </code></td>
+            </tr>
+            <tr>
+            <td><strong>Package Version</strong> </td>
+            <td><code> ${pac_version} </code></td>
+            </tr>
+             <tr>
+            <td><strong>Install Package</strong> </td>
+            <td><code> npm install ${pac_name}@${pac_version} </code></td>
+            </tr>
+            </table>
+            
+            
+            [Package Link](https://www.npmjs.com/package/@rafat97/hello-world/v/${pac_version})
 
-            Package - 
-            npm install ${pac_name}@${pac_version}
-            or
-            yarn add ${pac_name}@${pac_version}
             `
             })
 
