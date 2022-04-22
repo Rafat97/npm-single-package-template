@@ -1,4 +1,4 @@
-name: Node.js Package Create Tag and Release patch
+name: Options Node.js Package Create Tag and Release patch
 
 on:
   workflow_dispatch:
