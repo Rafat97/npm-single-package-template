@@ -1,1 +1,1 @@
-# npm-package-ci
+# npm-single-package-template
