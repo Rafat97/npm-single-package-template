@@ -1,4 +1,4 @@
-# NPM Package Template/Boilerplate  
+# NodeJs Package Template/Boilerplate  
 
 # How to use 
 
