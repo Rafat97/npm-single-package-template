@@ -44,27 +44,18 @@ jobs:
           echo "Compiling TypeScript"
           npm run build
           
-      - name: package.json Information
-        id: pk_version_pre_version
+      - name: Branch & Short SHA
+        id: brnh_s_sha
         run: |
-          PACKAGE_JSON_PATH="${1-.}"
-          echo "Reading package.json from ${PACKAGE_JSON_PATH}/package.json"
-          PACKAGE_VERSION=$(cat ${PACKAGE_JSON_PATH}/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-          PACKAGE_NAME=$(node -e "console.log(require('./package.json')['name'])")
           CURRENT_SHORT_SHA=$(git rev-parse --short HEAD)
           CURRENT_BRANCH=$(echo ${GITHUB_REF#refs/heads/})
-          echo ::set-output name=current-version::$PACKAGE_VERSION
-          echo ::set-output name=current-package-name::$PACKAGE_NAME   
           echo ::set-output name=sha_short::$CURRENT_SHORT_SHA
           echo ::set-output name=branch_name::$CURRENT_BRANCH
-
-          
-# npm version prerelease --preid ${{ env.PACKAGE_PRE_ID }} -m "Upgrade to %s " --no-git-tag-version
 
       - name: Version Change to Prerelease
         run: |
           echo "Version type prerelease"
-          npm version prerelease --preid ${{ env.PACKAGE_PRE_ID }}-${{steps.pk_version_pre_version.outputs.sha_short}} -m "Upgrade to %s " --no-git-tag-version
+          npm version prerelease --preid ${{ env.PACKAGE_PRE_ID }}-${{steps.brnh_s_sha.outputs.sha_short}} -m "Upgrade to %s " --no-git-tag-version
 
       
       - name: package.json Information
