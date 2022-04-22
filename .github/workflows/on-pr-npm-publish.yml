@@ -99,9 +99,11 @@ jobs:
             const pac_version = process.env.DEPLOYED_PACKAGE_VERSION;
             const latest_commit = process.env.CODE_LATEST_COMMIT;
             
+            console.log(context)
+            
             github.rest.issues.createComment({
             issue_number: prid,
-            owner: context.repo.owner,
+            owner: 'rafat97',
             repo: context.repo.repo,
             body: `
             ## Deploying with Automation Action
