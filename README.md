@@ -1,4 +1,4 @@
-# npm-single-package-template
+# NPM Package Template/Boilerplate  
 
 # CI Features
 
