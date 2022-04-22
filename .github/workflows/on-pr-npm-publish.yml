@@ -5,7 +5,7 @@ on:
     branches: [master, main, develop, staging]
     
 jobs:
-  pacakage_publish:
+  package_publish:
     runs-on: ubuntu-latest
     env:
       NODE_VERSION: 16
@@ -68,7 +68,9 @@ jobs:
         run: |
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
           ls -la
+          echo "Start Publishing"
           npm publish
+          echo "Start taging"
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} ${{ env.PACKAGE_PRE_ID }}
         env:
           NODE_AUTH_TOKEN: ${{ env.NPM_REG_ACC_TOK }}
