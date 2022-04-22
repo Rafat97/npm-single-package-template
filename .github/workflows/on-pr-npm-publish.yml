@@ -1,4 +1,4 @@
-name: Node.js Package Publish CI On PR
+name: On PR Node.js Package Publish CI 
 
 on:
   pull_request:
