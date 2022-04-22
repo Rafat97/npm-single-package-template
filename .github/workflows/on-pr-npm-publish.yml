@@ -11,7 +11,7 @@ jobs:
       NODE_VERSION: 16
       VERSION_TYPE: prerelase
       NPM_REG_URL: https://registry.npmjs.org/
-      NPM_REG_ACC_TOK: ${{github.secret.NPM_REG_ACC_TOK }}
+      NPM_REG_ACC_TOK: ${{ secret.NPM_REG_ACC_TOK }}
       PR_NUMBER: ${{ github.event.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PACKAGE_PRE_ID: pr_${{ github.event.number }}
