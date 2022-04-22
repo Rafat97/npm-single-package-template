@@ -15,6 +15,8 @@ jobs:
       PR_NUMBER: ${{ github.event.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PACKAGE_PRE_ID: pr-${{ github.event.number }}
+      USER_EMAIL: rafathaque1997@gmail.com
+      USER_NAME: Rafat97
       
     steps:
       - name: Variables 
@@ -77,6 +79,8 @@ jobs:
 
       - name: Npm publish prerelease
         run: |
+          git config --global user.email "${{env.USER_EMAIL} "
+          git config --global user.name "${{env.USER_NAME}}"
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
           ls -la
           echo "Start Publishing"
