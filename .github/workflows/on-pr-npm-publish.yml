@@ -79,7 +79,7 @@ jobs:
 
       - name: Npm publish prerelease
         run: |
-          git config --global user.email ${{env.USER_EMAIL}
+          git config --global user.email ${{env.USER_EMAIL}}
           git config --global user.name  ${{env.USER_NAME}}
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
           ls -la
