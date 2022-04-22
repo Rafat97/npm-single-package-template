@@ -1,4 +1,4 @@
-name: Node.js Package Publish CI
+name: On Release Node.js Package Publish CI
 
 # published, created, released
 # deleted 
