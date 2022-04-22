@@ -2,5 +2,5 @@
 
 # CI Features
 
- * [ ] Automatic package publish, tagging & release.
+ * [x] Automatic package publish, tagging & release.
  
