@@ -17,34 +17,36 @@ jobs:
       PACKAGE_PRE_ID: pr_${{ env.PR_NUMBER }}
       
     steps:
-        - name: Variables 
-          run: |
-            echo "Node Version ${{ env.NODE_VERSION }}"
-            echo "NPM Registey url ${{ env.NPM_REG_URL }}"
-            echo "Version type ${{ env.VERSION_TYPE }}"
-            echo "PR Number ${{ env.PR_NUMBER }}"
-            echo "Package preid ${{ env.PACKAGE_PRE_ID }}"
-            
-       - name: Git Checkout
-         uses: actions/checkout@v3     
-       - uses: actions/setup-node@v3
-         with:
+      - name: Variables 
+        run: |
+          echo "Node Version ${{ env.NODE_VERSION }}"
+          echo "NPM Registey url ${{ env.NPM_REG_URL }}"
+          echo "Version type ${{ env.VERSION_TYPE }}"
+          echo "PR Number ${{ env.PR_NUMBER }}"
+          echo "Package preid ${{ env.PACKAGE_PRE_ID }}"
+
+      - name: Git Checkout
+        uses: actions/checkout@v3    
+
+      - uses: actions/setup-node@v3
+        with:
           node-version: 16
           registry-url: ${{ env.NPM_REG_URL }}
-       
+
       - name: Npm Package Install
         run: npm install
+
       - name: Npm Run Test
         run: npm test
-        
+
       - name: Npm Package Build
         run: |
           echo "Compiling TypeScript"
           npm run build
-      - name: Version Change to Prerelease
+          - name: Version Change to Prerelease
           echo "Version type prerelease"
           npm version prerelease --preid ${{ env.PACKAGE_PRE_ID }} -m "Upgrade to %s " --no-git-tag-version
-      
+
       - name: package.json Information
         id: pk_version
         run: |
@@ -54,12 +56,12 @@ jobs:
           PACKAGE_NAME=$(node -e "console.log(require('./package.json')['name'])")
           echo ::set-output name=current-version::$PACKAGE_VERSION
           echo ::set-output name=current-package-name::$PACKAGE_NAME
-      
+
       - name: Version & Package Name
         run: |
           echo "${{ steps.pk_version.outputs.current-version  }}"
           echo "${{ steps.pk_version.outputs.current-package-name  }}"
-      
+
       - name: Npm publish prerelease
         run: |
           echo "Publishing ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
@@ -68,30 +70,30 @@ jobs:
           npm dist-tag add ${{steps.pk_version.outputs.current-package-name}}@${{steps.pk_version.outputs.current-version  }} ${{ env.PACKAGE_PRE_ID }}
         env:
           NODE_AUTH_TOKEN: ${{ env.NPM_REG_ACC_TOK }}
-      
+
       - name: Comment
         uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `
-              PR: context.issue.number
-              
-              Package - 
-                npm install ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}
-                or
-                yarn add ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}
-              `
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `
+            PR: context.issue.number
+
+            Package - 
+            npm install ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}
+            or
+            yarn add ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}
+            `
             })
-          
+
       - name: End
         run: |
           echo "Package published successfully. "
           echo "Package `dist-tag` is ${{ steps.pk_version.outputs.current-package-name  }}@{{ steps.pk_version.outputs.current-version  }}"
           echo "Thank you for giving the PR"
-      
-      
-            
+
+
+
