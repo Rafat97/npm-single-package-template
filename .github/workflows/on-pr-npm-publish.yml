@@ -43,7 +43,8 @@ jobs:
         run: |
           echo "Compiling TypeScript"
           npm run build
-          - name: Version Change to Prerelease
+          
+      - name: Version Change to Prerelease
           echo "Version type prerelease"
           npm version prerelease --preid ${{ env.PACKAGE_PRE_ID }} -m "Upgrade to %s " --no-git-tag-version
 
