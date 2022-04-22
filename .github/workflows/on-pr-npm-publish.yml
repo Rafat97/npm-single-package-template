@@ -14,7 +14,7 @@ jobs:
       NPM_REG_ACC_TOK: ${{ secrets.NPM_REG_ACC_TOK }}
       PR_NUMBER: ${{ github.event.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      PACKAGE_PRE_ID: pr_${{ github.event.number }}
+      PACKAGE_PRE_ID: pr-${{ github.event.number }}
       
     steps:
       - name: Variables 
