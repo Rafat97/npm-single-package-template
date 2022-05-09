@@ -16,6 +16,7 @@ Then you can use the example code [here](./example) .
 
  * [x] Automatic package publish, tagging & release.
  * [x] Automatic package publish on PR
+ * [x] Automatic package publish on PR when we comment `/npm_publish`
 
 
 # Thank Tou
