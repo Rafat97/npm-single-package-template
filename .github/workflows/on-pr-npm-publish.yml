@@ -6,7 +6,6 @@ on:
     
 jobs:
   package_publish:
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/npm_publish'}}
     runs-on: ubuntu-latest
     env:
       NODE_VERSION: 16
