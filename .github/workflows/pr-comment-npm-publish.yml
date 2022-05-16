@@ -41,7 +41,7 @@ jobs:
           echo "Checking out from PR #$PR_NUM based on URL: $PR_URL"
           hub pr checkout $PR_NUM
           
-
+      - run: git branch
       - uses: actions/setup-node@v3
         with:
           node-version: 16
