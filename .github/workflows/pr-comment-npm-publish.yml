@@ -21,13 +21,6 @@ jobs:
       USER_NAME: Rafat97
       
     steps:
-      - name: Get Branch name
-        id: branchName
-        run: |
-          echo 'BRANCH_NAME=$(echo $PR_COMMENT | cut -d "[" -f2 | cut -d "]" -f1)' >> $GITHUB_ENV
-        env:
-          PR_COMMENT: ${{ github.event.comment.body }}
-          
       - name: Variables 
         run: |
           echo "Node Version ${{ env.NODE_VERSION }}"
@@ -35,10 +28,21 @@ jobs:
           echo "Version type ${{ env.VERSION_TYPE }}"
           echo "PR Number ${{ env.PR_NUMBER }}"
           echo "Package preid ${{ env.PACKAGE_PRE_ID }}"
-          echo "Branch name ${{ env.BRANCH_NAME }}"
+          
+      - name: Git Checkout
+        uses: actions/checkout@v3  
+      - name: Checkout Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_URL="${{ github.event.issue.pull_request.url }}"
+          PR_NUM=${PR_URL##*/}
+          echo "Checking out from PR #$PR_NUM based on URL: $PR_URL"
+          hub pr checkout $PR_NUM
+          
 
-#       - name: Git Checkout
-#         uses: actions/checkout@v3    
+
+  
 
 #       - uses: actions/setup-node@v3
 #         with:
