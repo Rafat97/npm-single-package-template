@@ -25,6 +25,8 @@ jobs:
         id: branchName
         run: |
           echo 'BRANCH_NAME=$(echo $PR_COMMENT | cut -d "[" -f2 | cut -d "]" -f1)' >> $GITHUB_ENV
+        env:
+          PR_COMMENT: ${{ github.event.comment.body }}
           
       - name: Variables 
         run: |
